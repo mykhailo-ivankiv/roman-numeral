@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Транслятор римської системи числення</title>
+    <link rel="stylesheet" href="commonStyle.css">
+    <link rel="stylesheet" href="roman-app.css">
+</head>
+
+<body>
+    <h2>Транслятор з римської системи числення в десяткову (арабську).</h2>
+
+    <div class = "roman-app">
+        <div>
+            <label for="roman">Римські числа</label>
+            <input 
+                id="roman"
+                type="text" 
+                class="roman-app__input"
+                placeholder="Пр. XCIV"
+                />
+            <span id="romanError" class="roman-app__roman-error">
+                <span class="roman-app__error-string"></span>
+                <span class="roman-app__error-description"></span>
+            </span>
+        </div>
+        <div class="roman-app__separator"> = </div>
+        <div>
+            <label for="roman">Арабські числа</label>
+            <input 
+                id="arab"
+                type="text" 
+                class="roman-app__input"
+                placeholder="Пр. 46"
+                />
+            <span id="arabError" class="roman-app__roman-error">
+                <span class="roman-app__error-string"></span>
+                <span class="roman-app__error-description"></span>
+            </span>
+        </div>
+    </div>
+
+    <script src="./roman.js"></script>
+    <script>
+        const romanInput = document.getElementById("roman");
+        const romanErrorEl = document.getElementById("romanError");
+
+        const arabInput = document.getElementById("arab");
+        const arabErrorEl = document.getElementById("arabError");
+
+        const processRomanToDec = (romanString) => {
+            romanToDec(romanString)
+                .then ( value => {
+                    arabInput.value = value;
+                    romanErrorEl
+                        .getElementsByClassName("roman-app__error-description")[0]
+                        .innerHTML = "";
+                    romanErrorEl
+                        .getElementsByClassName("roman-app__error-string")[0]
+                        .innerHTML = "";
+                })
+                .catch ( ({msg, position}) => {
+                    romanErrorEl
+                        .getElementsByClassName("roman-app__error-description")[0]
+                        .innerHTML = msg;
+
+                    romanErrorEl
+                        .getElementsByClassName("roman-app__error-string")[0]
+                        .innerHTML = romanString.slice(0, position) + 
+                            `<i class="roman-app__error-letter">${romanString[position]}</i>` 
+                            + romanString.slice(position+1);
+                });
+        }
+
+        const processDecToRoman = (decString) => {
+            decToRoman(decString)
+                .then ( value => {
+                    romanInput.value = value;
+                    
+                    arabErrorEl
+                        .getElementsByClassName("roman-app__error-description")[0]
+                        .innerHTML = "";
+                    arabErrorEl
+                        .getElementsByClassName("roman-app__error-string")[0]
+                        .innerHTML = "";
+                })
+                .catch ( ({msg, position}) => {
+                    arabErrorEl
+                        .getElementsByClassName("roman-app__error-description")[0]
+                        .innerHTML = msg;
+                    arabErrorEl
+                        .getElementsByClassName("roman-app__error-string")[0]
+                        .innerHTML = "";
+                })
+
+        }
+        
+        if (romanInput.value) {
+            processRomanToDec(romanInput.value)
+        } else if (arabInput.value) {
+            processDecToRoman(arabInput.value);
+        }
+        
+        romanInput.addEventListener("input", () => {
+            processRomanToDec(romanInput.value)
+        });
+
+        arabInput.addEventListener("input", () => {
+            processDecToRoman(arabInput.value)
+        })
+    </script>
+
+    <h3>Правила формування римських чисел</h3>
+    <p>
+        Відповідність літер і цифр:
+        <code>
+<pre>
+    I = 1
+    V = 5 
+    X = 10
+    L = 50
+    C = 100
+    D = 500
+    M = 1000
+</pre>
+                </code>
+    </p>
+
+    <p>
+        Цифри <code>I, X, C, M,</code> можуть повторюватися, але не більше трьох разів.
+        <h4>Приклад:</h4>
+        <code>
+<pre>
+    XXX = 30
+    XXXVI = 36
+    XXXIX = 39
+</pre>
+                </code>
+    </p>
+
+    <p>
+        Якщо менша цифра стоїть праворуч від більшої, тоді цифри сумуються.
+    </p>
+
+    <p>
+        Якщо менша цифра стоїть зліва від більшої, тоді її слід відняти від більшої. Відніматися можуть тільки цифри
+        <code>I, X, C</code>, і як зменшуване можуть виступати тільки найближчі в числовому ряду до від'ємника дві цифри
+        (тобто від'ємник, помножений на <code>5</code> або <code>10</code>). Повторення меншої цифри не допускається.
+    </p>
+    <p>
+        Такимчином, існує тільки шість варіантів використання «правила віднімання»:
+        <code>
+<pre>
+    IV = 4
+    IX = 9
+    XL = 40
+    XC = 90
+    CD = 400
+    CM = 900
+</pre>
+        </code>
+
+        <h4>Приклад:</h4>
+        <code><pre>
+    XCIV = 100 - 10 + 5 - 1 = 94
+                </pre></code>
+    </p>
+    Інші способи «віднімання» неприпустимі, так, число <code>99</code> має бути записано як <code>XCIX</code>, але не як
+    <code>IC</code>.
+    </p>
+
+    <h3>Формальний опис в <a href="https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form">формах Бакуса-Наура</a></h3>
+    <code>
+<pre>
+romanNum     -> thousand hundred ten digit
+
+thousand     -> M 
+              | MM 
+              | MMM
+              | ε
+
+hundred      -> smallHundred 
+              | CD 
+              | D smallHundred 
+              | CM 
+
+smallHundred -> C 
+              | CC 
+              | CCC 
+              | ε
+
+ten          -> smallTen 
+              | XL 
+              | L smallTen 
+              | XC 
+
+smallTen     -> X 
+              | XX 
+              | XXX 
+              | ε
+
+digit        -> smallDigit 
+              | IV 
+              | V smallDigit 
+              | IX 
+
+smallDigit   -> I 
+              | II 
+              | III 
+              | ε
+</pre>
+    </code>
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+romanNum     ::= thousand hundred ten digit
+thousand     ::= M | MM | MMM
+hundred      ::= smallHundred | CD | D smallHundred | CM 
+smallHundred ::= C | CC | CCC | ε
+ten          ::= smallTen | XL | L smallTen | XC 
+smallTen     ::= X | XX | XXX | ε
+digit        ::= smallDigit | IV | V smallDigit | IX 
+smallDigit   ::= I | II | III | ε

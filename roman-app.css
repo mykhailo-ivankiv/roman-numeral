@@ -1,0 +1,64 @@
+.roman-app {
+    display: flex;
+}
+
+.roman-app__input {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 20px;
+    font-family: Pt Sans, sans-serif;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid #ccc;
+}
+.roman-app__input:focus {
+    border: 1px solid cornflowerblue;
+    box-shadow: 0px 0px 1px cornflowerblue;
+}
+
+.roman-app__separator {
+    font-size: 40px;
+    font-family: Pt Sans, sans-serif;
+    width: 70px;
+    text-align: center;
+    padding-top: 21px;
+}
+
+.roman-app__error-letter {
+    font-style: inherit;
+    position: relative;
+}
+.roman-app__error-letter:after {
+    content: "^";
+    position: absolute;
+    color: red;
+    bottom: -24px;
+    left: calc(50% - 4.5px);
+
+}
+
+.roman-app__error-string {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 20px;
+    font-family: Pt Sans, sans-serif;
+    padding: 10px;
+    position: absolute;
+
+    left: 1px;
+    top: -47px;
+
+    z-index: -1;
+    color: transparent;
+}
+
+.roman-app__roman-error {
+    display:  block;
+    position: relative;
+    height: 42px;
+}
+
+.roman-app__error-description {
+    color: red;
+}
