@@ -6,19 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Транслятор римської системи числення</title>
-    <link rel="stylesheet" href="commonStyle.css">
-    <link rel="stylesheet" href="roman-app.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/roman-app.css">
 </head>
 
 <body>
+    <div class="layout">
     <h2>Транслятор з римської системи числення в десяткову (арабську).</h2>
 
     <div class = "roman-app">
         <div>
             <label for="roman">Римські числа</label>
-            <input 
+            <input
                 id="roman"
-                type="text" 
+                type="text"
                 class="roman-app__input"
                 placeholder="Пр. XCIV"
                 />
@@ -30,9 +32,9 @@
         <div class="roman-app__separator"> = </div>
         <div>
             <label for="roman">Арабські числа</label>
-            <input 
+            <input
                 id="arab"
-                type="text" 
+                type="text"
                 class="roman-app__input"
                 placeholder="Пр. 46"
                 />
@@ -43,75 +45,6 @@
         </div>
     </div>
 
-    <script src="./roman.js"></script>
-    <script>
-        const romanInput = document.getElementById("roman");
-        const romanErrorEl = document.getElementById("romanError");
-
-        const arabInput = document.getElementById("arab");
-        const arabErrorEl = document.getElementById("arabError");
-
-        const processRomanToDec = (romanString) => {
-            romanToDec(romanString)
-                .then ( value => {
-                    arabInput.value = value;
-                    romanErrorEl
-                        .getElementsByClassName("roman-app__error-description")[0]
-                        .innerHTML = "";
-                    romanErrorEl
-                        .getElementsByClassName("roman-app__error-string")[0]
-                        .innerHTML = "";
-                })
-                .catch ( ({msg, position}) => {
-                    romanErrorEl
-                        .getElementsByClassName("roman-app__error-description")[0]
-                        .innerHTML = msg;
-
-                    romanErrorEl
-                        .getElementsByClassName("roman-app__error-string")[0]
-                        .innerHTML = romanString.slice(0, position) + 
-                            `<i class="roman-app__error-letter">${romanString[position]}</i>` 
-                            + romanString.slice(position+1);
-                });
-        }
-
-        const processDecToRoman = (decString) => {
-            decToRoman(decString)
-                .then ( value => {
-                    romanInput.value = value;
-                    
-                    arabErrorEl
-                        .getElementsByClassName("roman-app__error-description")[0]
-                        .innerHTML = "";
-                    arabErrorEl
-                        .getElementsByClassName("roman-app__error-string")[0]
-                        .innerHTML = "";
-                })
-                .catch ( ({msg, position}) => {
-                    arabErrorEl
-                        .getElementsByClassName("roman-app__error-description")[0]
-                        .innerHTML = msg;
-                    arabErrorEl
-                        .getElementsByClassName("roman-app__error-string")[0]
-                        .innerHTML = "";
-                })
-
-        }
-        
-        if (romanInput.value) {
-            processRomanToDec(romanInput.value)
-        } else if (arabInput.value) {
-            processDecToRoman(arabInput.value);
-        }
-        
-        romanInput.addEventListener("input", () => {
-            processRomanToDec(romanInput.value)
-        });
-
-        arabInput.addEventListener("input", () => {
-            processDecToRoman(arabInput.value)
-        })
-    </script>
 
     <h3>Правила формування римських чисел</h3>
     <p>
@@ -119,7 +52,7 @@
         <code>
 <pre>
     I = 1
-    V = 5 
+    V = 5
     X = 10
     L = 50
     C = 100
@@ -177,42 +110,43 @@
 <pre>
 romanNum     -> thousand hundred ten digit
 
-thousand     -> M 
-              | MM 
+thousand     -> M
+              | MM
               | MMM
               | ε
 
-hundred      -> smallHundred 
-              | CD 
-              | D smallHundred 
-              | CM 
+hundred      -> smallHundred
+              | CD
+              | D smallHundred
+              | CM
 
-smallHundred -> C 
-              | CC 
-              | CCC 
+smallHundred -> C
+              | CC
+              | CCC
               | ε
 
-ten          -> smallTen 
-              | XL 
-              | L smallTen 
-              | XC 
+ten          -> smallTen
+              | XL
+              | L smallTen
+              | XC
 
-smallTen     -> X 
-              | XX 
-              | XXX 
+smallTen     -> X
+              | XX
+              | XXX
               | ε
 
-digit        -> smallDigit 
-              | IV 
-              | V smallDigit 
-              | IX 
+digit        -> smallDigit
+              | IV
+              | V smallDigit
+              | IX
 
-smallDigit   -> I 
-              | II 
-              | III 
+smallDigit   -> I
+              | II
+              | III
               | ε
 </pre>
     </code>
-
+    </div>
+    <script src="js/index.js" type="module"></script>
 </body>
 </html>
