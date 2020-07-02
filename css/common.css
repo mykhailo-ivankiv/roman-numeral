@@ -1,4 +1,7 @@
 body { font-family: Pt Serif; }
 code { font-family: "Fira Code"; }
-pre  { font-family: inherit; font-size: 0.8rem; }
+pre  { font-family: inherit; }
 
+@media (width <= 500px) {
+    pre  { font-size: 0.8rem }
+}
