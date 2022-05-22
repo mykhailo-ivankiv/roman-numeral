@@ -1,5 +1,7 @@
-body { font-family: Pt Serif; }
-code { font-family: "Fira Code"; }
+ @import url('https://fonts.googleapis.com/css2?family=Fira+Code&family=PT+Serif:wght@400;700&display=swap');
+
+body { font-family: Pt Serif, serif; }
+code { font-family: Fira Code, monospace; }
 pre  { font-family: inherit; }
 
 @media (width <= 500px) {
